@@ -64,9 +64,6 @@ textarea {
 textarea:focus-visible {
   outline: none;
 }
-textarea:hover {
-  color: #646cff;
-}
 .send-btn {
   position: absolute;
   right: 30px;
