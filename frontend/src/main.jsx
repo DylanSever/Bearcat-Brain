@@ -1,3 +1,7 @@
+// React Router setup for future multi-page support.
+// The app currently is using one main page but routing setup is here so
+// additional pages can be added easily.
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
