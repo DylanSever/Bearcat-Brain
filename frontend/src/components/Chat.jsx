@@ -3,21 +3,60 @@ import { useEffect, useRef, useState } from "react";
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const chatRef = useRef(null);
 
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
-  const onSend = (e) => {
+  async function sendToBackend(nextMessages) {
+    const response = await fetch("http://localhost:8000/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "llama3.1:8b",
+        messages: nextMessages,
+      }),
+    });
+    if (!response.ok) {
+      const tmp = await response.text();
+      throw new Error(tmp || `Request failed: ${res.status}`);
+    }
+    return response.json();
+  }
+
+  const onSend = async (e) => {
     e.preventDefault();
     const q = text.trim();
-    if (!q) return;
 
-    setMessages((prev) => [...prev, { role: "user", content: q }]);
+    if (!q || isLoading) return;
+
+    const userMsg = { role: "user", content: q };
+
+    const nextMessages = [...messages, userMsg];
+    setMessages(nextMessages);
+
     setText("");
+    setIsLoading(true);
+
+    try {
+      const data = await sendToBackend(nextMessages);
+
+      const botMsg = { role: "assistant", content: data.reply };
+      setMessages((prev) => [...prev, botMsg]);
+    } catch (err) {
+      setMessages ((prev) => [
+        ...prev,
+        { role: "assistant", content: `Error: ${err.message}`},
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -38,6 +77,13 @@ export default function Chat() {
               </div>
             ))
           )}
+
+          {isLoading && (
+            <div className="bb-msgRow bb-bot">
+              <div className="bb-bubble">Thinking...</div>
+            </div>
+          )}
+
         </div>
 
         <form className="bb-chatForm" onSubmit={onSend}>
@@ -47,9 +93,10 @@ export default function Chat() {
             onChange={(e) => setText(e.target.value)}
             placeholder="Ask me C++ questions..."
             autoComplete="off"
+            disabled={isLoading}
           />
-          <button className="bb-sendBtn" type="submit">
-            Send
+          <button className="bb-sendBtn" type="submit" disabled={isLoading}>
+            {isLoading ? "Thinking..." : "Send"}
           </button>
         </form>
       </div>

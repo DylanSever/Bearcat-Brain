@@ -10,5 +10,9 @@ pip install "fastapi[standard]"
 
 ## Run
 .venv\Scripts\activate
+
+
+uvicorn app.main:app 
+or
 cd app
 fastapi dev main.py
