@@ -1,47 +1,58 @@
-import { useRef } from 'react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from "react";
 
-function Chat() {
-    const [input, setInput] = useState('');
-    const [output, setOutput] = useState('');
+export default function Chat() {
+  const [messages, setMessages] = useState([]);
+  const [text, setText] = useState("");
+  const chatRef = useRef(null);
 
-    const inputRef = useRef(null);
-
-    function handleSend() {
-        if (input.trim() === '') return;
-        setOutput(function(prev) {
-            if (!prev) return input;
-            return prev + '\n' + input;
-        });
-        setInput('');
-        inputRef.current?.focus();
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
+  }, [messages]);
 
-    return (
-        <div className="chat-page">
-            <h3>Bearcat Brain</h3>
+  const onSend = (e) => {
+    e.preventDefault();
+    const q = text.trim();
+    if (!q) return;
 
-            <textarea
-                className="chat-output"
-                rows="20"
-                readOnly={true}
+    setMessages((prev) => [...prev, { role: "user", content: q }]);
+    setText("");
+  };
 
-                value={output}
-            ></textarea>
+  return (
+    <div className="bb-page">
+      <h1 className="bb-title">Bearcat Brain</h1>
 
-            <textarea 
-                className="form-control" 
-                rows="2" 
-                placeholder="Ask me C++ questions..."
-
-                ref={inputRef}
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-            ></textarea>
-
-            <button className="send-btn" onClick={handleSend}>Send</button>
+      <div className="bb-chatCard">
+        <div className="bb-chatWindow" ref={chatRef}>
+          {messages.length === 0 ? (
+            <div className="bb-emptyHint">Ask me C++ questions...</div>
+          ) : (
+            messages.map((m, i) => (
+              <div
+                key={i}
+                className={`bb-msgRow ${m.role === "user" ? "bb-user" : "bb-bot"}`}
+              >
+                <div className="bb-bubble">{m.content}</div>
+              </div>
+            ))
+          )}
         </div>
-    );
-}
 
-export default Chat;
+        <form className="bb-chatForm" onSubmit={onSend}>
+          <input
+            className="bb-chatInput"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Ask me C++ questions..."
+            autoComplete="off"
+          />
+          <button className="bb-sendBtn" type="submit">
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
