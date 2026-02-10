@@ -6,3 +6,7 @@ app.egg-info
 htmlcov
 .cache
 .venv
+bearcat_db/
+private.py
+.env
+venv/
