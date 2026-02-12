@@ -15,7 +15,7 @@ export default function Chat() {
   }, [messages, isLoading]);
 
   async function sendToBackend(nextMessages) {
-    const response = await fetch("http://localhost:8000/api/chat", {
+    const response = await fetch("http://10.25.1.49:8000/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

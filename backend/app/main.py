@@ -26,7 +26,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     reply: str
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
+OLLAMA_URL = "http://10.25.1.49:8000/chat"
 
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
@@ -51,7 +51,7 @@ async def chat(req: ChatRequest):
     except httpx.ConnectError:
         raise HTTPException(
             status_code=503,
-            detail="Could not connect to Ollama at http://localhost:11434. Is Ollama running?",
+            detail="Could not connect to Ollama at http://10.25.1.49:8000/chat. Is Ollama running?",
         )
     except httpx.HTTPStatusError as e:
         raise HTTPException(status_code=502, detail=f"Ollama error: {e.response.text}")
