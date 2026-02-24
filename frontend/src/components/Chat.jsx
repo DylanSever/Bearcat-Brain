@@ -14,18 +14,17 @@ export default function Chat() {
     }
   }, [messages, isLoading]);
 
-  async function sendToBackend(nextMessages) {
-    const response = await fetch("http://10.25.1.49:8000/api/chat", {
+  async function sendToBackend(userMessage) {
+    const response = await fetch("http://10.25.1.49:8000/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "llama3.1:8b",
-        messages: nextMessages,
+        message: userMessage,
       }),
     });
     if (!response.ok) {
       const tmp = await response.text();
-      throw new Error(tmp || `Request failed: ${res.status}`);
+      throw new Error(tmp || `Request failed: ${response.status}`);
     }
     return response.json();
   }
@@ -45,7 +44,7 @@ export default function Chat() {
     setIsLoading(true);
 
     try {
-      const data = await sendToBackend(nextMessages);
+      const data = await sendToBackend(q);
 
       const botMsg = { role: "assistant", content: data.reply };
       setMessages((prev) => [...prev, botMsg]);
