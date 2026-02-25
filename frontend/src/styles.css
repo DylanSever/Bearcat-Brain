@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color-scheme: dark;
+  color: rgba(255,255,255,0.92);
   background-color: #242424;
 
   font-synthesis: none;
@@ -12,8 +14,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  background: #242424;
+  margin: 0;
+}
+
 h3 {
-  font-weight: 400;
+  font-weight: 500;
 }
 
 button {
@@ -25,38 +32,45 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.2s ease;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--bb-green);
 }
 button:focus,
 button:focus-visible {
   outline: none;
 }
 
-@media (prefers-color-scheme: light) {
+/*@media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
+    --bb-text: #000000;
   }
   a:hover {
-    color: #646cff;
+    color: #0c390c;
   }
   button {
     background-color: #f9f9f9;
   }
 }
-
+*/
 :root {
+  --bb-green: #1a5632;
+  --bb-green-dark: #0f3b22;
+  --bb-gold: #d9ad26;
+
   --bb-bg: #1f1f1f;
   --bb-panel: #3a3a3a;
-  --bb-text: rgba(255, 255, 255, 0.9);
+  --bb-text: rgba(255, 255, 255, 0.92);
   --bb-muted: #9b9b9b;
   --bb-border: rgba(255, 255, 255, 0.08);
   --bb-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   --bb-radius: 12px;
 }
+
+
 
 .bb-page {
   padding: 18px 18px 28px;
@@ -64,19 +78,34 @@ button:focus-visible {
 }
 
 .bb-title {
-  margin: 0 0 16px 0;
-  font-size: 28px;
-  font-weight: 700;
+  text-align: center;
+  margin: 0 0 18px 0;
+  font-size: 35px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.35);
+  position: relative;
+}
+
+.bb-title::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 2px;
+  margin: 8px auto 0;
+  background: var(--bb-green);
+  border-radius: 2px;
+  opacity: 0.85;
 }
 
 .bb-chatCard {
-  max-width: 980px;
   width: 100%;
 }
 
 .bb-chatWindow {
-  height: calc(100vh - 170px);
+  height: calc(100vh - 300px);
   min-height: 360px;
+  /*width: 100%;*/
   background: var(--bb-panel);
   border-radius: var(--bb-radius);
   box-shadow: var(--bb-shadow);
@@ -84,6 +113,8 @@ button:focus-visible {
   padding: 16px;
   overflow-y: auto;
 }
+
+
 
 .bb-emptyHint {
   color: var(--bb-muted);
@@ -106,7 +137,13 @@ button:focus-visible {
   color: var(--bb-text);
   padding: 0 14px;
   outline: none;
+  font-weight: 500;
 }
+
+.bb-chatInput:focus {
+  border-color: var(--bb-green);
+}
+
 
 .bb-chatInput::placeholder {
   color: var(--bb-muted);
@@ -120,15 +157,19 @@ button:focus-visible {
   height: 46px;
   padding: 0 18px;
   border-radius: 10px;
-  border: 1px solid var(--bb-border);
+  border: 1px solid rgba(0,0,0,0.15);
   background: #222;
   color: var(--bb-text);
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bb-sendBtn:hover {
-  background: #262626;
+ background: #262626;
+ box-shadow: 0 0 0 1px var(--bb-green) inset;
 }
 
 .bb-msgRow {
@@ -149,7 +190,31 @@ button:focus-visible {
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid var(--bb-border);
-  background: rgba(0, 0, 0, 0.18);
+  background: rgba(0,0,0,0.18);
   white-space: pre-wrap;
-  line-height: 1.35;
+  line-height: 1.4;
+  font-size: 15px;
+}
+
+.bb-user .bb-bubble {
+  border-left: 3px solid var(--bb-gold);
+}
+
+.bb-bot .bb-bubble {
+  border-left: 3px solid var(--bb-green);
+}
+
+.thinking {
+  width: 18px;
+  height: 18px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

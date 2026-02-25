@@ -95,7 +95,13 @@ export default function Chat() {
             disabled={isLoading}
           />
           <button className="bb-sendBtn" type="submit" disabled={isLoading}>
-            {isLoading ? "Thinking..." : "Send"}
+            {isLoading ? (
+              <span className="thinking"></span>
+            ) : (
+              <svg viewBox="0 0 24 24" width="22" height="22">
+                <path d="M2 21L23 12L2 3L2 10L17 12L2 14Z" fill="currentColor"/>
+              </svg>
+  )}
           </button>
         </form>
       </div>
