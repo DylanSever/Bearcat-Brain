@@ -177,6 +177,11 @@ button:focus-visible {
   color: var(--bb-muted);
 }
 
+.bb-chatInput:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
 .bb-sendBtn {
   height: 46px;
   padding: 0 18px;
@@ -194,6 +199,10 @@ button:focus-visible {
 .bb-sendBtn:hover {
  background: #262626;
  box-shadow: 0 0 0 1px var(--bb-gold) inset;
+}
+
+.bb-sendBtn:disabled {
+  opacity: 0.25;
 }
 
 .bb-sendBtn:active {
