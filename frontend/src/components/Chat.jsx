@@ -79,9 +79,11 @@ export default function Chat() {
 
           {isLoading && (
             <div className="bb-msgRow bb-bot">
-              <div className="bb-bubble">Thinking...</div>
+              <div className="bb-bubble">
+                <span className="bb-dots"><i></i><i></i><i></i></span>
+              </div>
             </div>
-          )}
+            )}
 
         </div>
 
