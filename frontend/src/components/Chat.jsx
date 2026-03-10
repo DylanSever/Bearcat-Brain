@@ -64,24 +64,31 @@ export default function Chat() {
 
       <div className="bb-chatCard">
         <div className="bb-chatWindow" ref={chatRef}>
-          {messages.length === 0 ? (
-            <div className="bb-emptyHint">Ask me C++ questions...</div>
-          ) : (
+
+        <div className = "bb-msgRow bb-bot">
+          <div className="bb-bubble bb-staticIntro">
+            How can I help you today?
+          </div>
+        </div>
+
+           {(
             messages.map((m, i) => (
               <div
                 key={i}
                 className={`bb-msgRow ${m.role === "user" ? "bb-user" : "bb-bot"}`}
               >
-                <div className="bb-bubble">{m.content}</div>
-              </div>
+                <div className="bb-bubble">{m.content}</div>              
+                </div>
             ))
           )}
 
           {isLoading && (
             <div className="bb-msgRow bb-bot">
-              <div className="bb-bubble">Thinking...</div>
+              <div className="bb-bubble">
+                <span className="bb-dots"><i></i><i></i><i></i></span>
+              </div>
             </div>
-          )}
+            )}
 
         </div>
 
@@ -90,12 +97,14 @@ export default function Chat() {
             className="bb-chatInput"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Ask me C++ questions..."
+            placeholder="Ask Bearcat Brain..."
             autoComplete="off"
             disabled={isLoading}
           />
           <button className="bb-sendBtn" type="submit" disabled={isLoading}>
-            {isLoading ? "Thinking..." : "Send"}
+              <svg viewBox="0 0 24 24" width="22" height="22">
+                <path d="M2 21L23 12L2 3L2 10L17 12L2 14Z" fill="currentColor"/>
+              </svg>
           </button>
         </form>
       </div>
