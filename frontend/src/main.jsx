@@ -14,18 +14,23 @@ import Settings from "./components/Settings.jsx";
 import About from "./components/About.jsx";
 import NotFoundPage from "./components/NotFoundPage.jsx";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Root />,
+      children: [
+        { index: true, element: <Chat /> },
+        { path: "/settings", element: <Settings /> },
+        { path: "/about", element: <About /> },
+      ],
+    },
+    { path: "*", element: <NotFoundPage /> },
+  ],
   {
-    path: "/",
-    element: <Root />,
-    children: [
-      { index: true, element: <Chat /> },
-      { path: "/settings", element: <Settings /> },
-      { path: "/about", element: <About /> },
-    ],
-  },
-  { path: "*", element: <NotFoundPage /> },
-]);
+    basename: '/bearcat-brain'
+  }
+);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
