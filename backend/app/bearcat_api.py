@@ -2,7 +2,7 @@
 #Fast API setup that allows Frontend to make calls to Backend without using base ollama endpoint
 #make available with uvicorn bearcat_api:app --host 0.0.0.0 --port 8000
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -10,6 +10,7 @@ import ollama
 import chromadb
 import bearcat_sql
 import sys
+from auth import LoginRequest, ldap_authentication, create_jwt, verify_token
 
 #Server Setup
 app = FastAPI()
@@ -40,13 +41,31 @@ except Exception as e:
     print(f"    > Warning: Memory Failed ({e}). running without RAG.")
     collection = None
 
-#Define what is being sent from the Frontend (Likely JSON)
+
+# chat request model
 class ChatRequest(BaseModel):
     message: str
 
-#API endpoint so it isnt the base ollama knowledge set.
+
+# authentication endpoint
+@app.post("/auth/login")
+def login_endpoint(request: LoginRequest):
+    if not ldap_authentication(request.username, request.password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    token = create_jwt(request.username)
+
+    # TODO: add logging on new sql table
+
+    return {
+        "access_token": token,
+        "token_type": "bearer"
+    }
+
+
+# chat endpoint with db knowledge set, protected with Depends(verify_token)
 @app.post("/chat")
-def chat_endpoint(request: ChatRequest):
+def chat_endpoint(request: ChatRequest, username: str = Depends(verify_token)):
     user_input = request.message
 
     #retrieve context for RAG
