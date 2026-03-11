@@ -1,8 +1,6 @@
-'''
-Dylan Sever
-1/28/2026
-Data ingestion program for database
-'''
+#Dylan Sever
+#1/28/2026
+#Data ingestion program for database
 
 import chromadb
 import os

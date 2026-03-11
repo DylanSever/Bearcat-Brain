@@ -1,6 +1,6 @@
 #Dylan Sever 2/9/2026
 #Fast API setup that allows Frontend to make calls to Backend without using base ollama endpoint
-
+#make available with uvicorn bearcat_api:app --host 0.0.0.0 --port 8000
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -74,9 +74,7 @@ def chat_endpoint(request: ChatRequest):
     #Create Response!
     #We will combine our System Instructions + Context + and User Input
 
-    final_prompt = f"you are the Bearcat Brain, a CS Tutor for Saint Vincent College. your goal is to assist students retaining to only C++ topics. {context_text}\nStudent: {user_input}" 
-
-
+    final_prompt = f"you are the Bearcat Brain, a CS Tutor for Saint Vincent College. your goal is to assist students retaining to only C++ topics. {context_text}\nStudent: {user_input}"   
 
 
     try:
@@ -97,31 +95,3 @@ def chat_endpoint(request: ChatRequest):
     except Exception as e:
         print(f"error: {e}")
         raise HTTPException(status_code=500, detail="Backend API Error: {str(e)}")
-
-#make available with uvicorn bearcat_api:app --host 0.0.0.0 --port 8000
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

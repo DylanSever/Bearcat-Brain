@@ -1,5 +1,6 @@
 #Dylan Sever 2/5/2026
 #This program allows for the writinng to a MySQL 9 database
+
 import mysql.connector
 from mysql.connector import Error
 from datetime import datetime

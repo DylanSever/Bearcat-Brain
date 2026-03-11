@@ -1,6 +1,7 @@
 #dylan sever
 #2/6/2026
 #allows the ingestion of PDFs (specifically a c++ book for this project), chunk them by each page, and sves them into the vector database (chromaDB) for the ai to search.
+
 import chromadb #vector database
 import os
 import uuid # generating unique ids for chunks
