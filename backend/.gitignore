@@ -10,3 +10,4 @@ bearcat_db/
 private.py
 .env
 venv/
+source_documents/
