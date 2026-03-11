@@ -5,6 +5,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 import ollama
 import chromadb
 import bearcat_sql
@@ -24,7 +25,8 @@ app.add_middleware(
 
 
 #Load Memory
-DB_PATH = "./bearcat_db"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = BASE_DIR / "bearcat_db"
 COLLECTION_NAME = "cpp_curriculum"
 MODEL = "llama3.1:8b" #important that this is the model installed on machine!
 

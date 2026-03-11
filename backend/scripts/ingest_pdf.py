@@ -6,9 +6,11 @@ import chromadb #vector database
 import os
 import uuid # generating unique ids for chunks
 from pypdf import PdfReader # reads PDFs
+from pathlib import Path
 
 #chroma db steup - path to files, resource locations, name of complete collection
-DB_PATH = "./bearcat_db"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = BASE_DIR / "bearcat_db"
 SOURCE_FOLDER = "./source_documents"
 COLLECTION_NAME = "cpp_curriculum"
 

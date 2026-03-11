@@ -5,17 +5,19 @@
 import chromadb
 import os
 import uuid #unique chunk generation. don't want bloated files!
+from pathlib import Path
 
 #define paths of materials and destionations
 
-DB_PATH = "./bearcat_db"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = BASE_DIR / "bearcat_db"
 SOURCE_FOLDER ="./source_documents"
 COLLECTION_NAME = "cpp_curriculum"
 
 #check for folder destination already existing. will help with adding more content
 if not os.path.exists(SOURCE_FOLDER):
     os.makedirs(SOURCE_FOLDER)
-    PRINT(f"Created folder '{SOURCE_FOLDER}' . Please put any files in there and run this again.")
+    print(f"Created folder '{SOURCE_FOLDER}' . Please put any files in there and run this again.")
 
 #initialize chroma and connect
 print("Connecting to the Bearcat Brain...")
