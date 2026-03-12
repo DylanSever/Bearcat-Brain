@@ -95,7 +95,7 @@ def chat_endpoint(request: ChatRequest, username: str = Depends(verify_token)):
     #Create Response!
     #We will combine our System Instructions + Context + and User Input
 
-    final_prompt = f"you are the Bearcat Brain, a CS Tutor for Saint Vincent College. your goal is to assist students retaining to only C++ topics. {context_text}\nStudent: {user_input}"   
+    final_prompt = f"you are the Bearcat Brain, a CS Tutor for Saint Vincent College. your goal is to assist students retaining to only C++ topics. Before answering the student, you must first think through the problem step-by-step. Break down their code if any is given, identify the core concept from your retrieved documents, and formulate a logical solution. Only output your final, helpful response to the student. {context_text}\nStudent: {user_input}"   
 
 
     try:
