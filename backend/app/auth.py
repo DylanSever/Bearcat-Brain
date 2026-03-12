@@ -45,7 +45,7 @@ def ldap_authentication(username: str, password: str) -> bool:
 def create_jwt(username: str) -> str:
     payload = {
         "subject": username,
-        "expiration": datetime.utcnow() + timedelta(minutes=JWT_EXPIRE)
+        "exp": datetime.utcnow() + timedelta(minutes=JWT_EXPIRE)
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGO)
 
