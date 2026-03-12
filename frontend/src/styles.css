@@ -283,3 +283,117 @@ button:focus-visible {
     transform: rotate(360deg);
   }
 }
+
+/* Login page */
+.login-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #242424;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.login-container {
+  width: clamp(320px, 40vw, 520px);
+  padding: 40px;
+  background: #3a3a3a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.login-container h1 {
+  margin-bottom: 0;
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.35);
+  position: relative;
+}
+
+.login-container h1::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 2px;
+  margin: 10px auto 0;
+  background: var(--bb-green);
+  border-radius: 2px;
+  opacity: 0.85;
+}
+
+.input-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.login-subtitle {
+  margin: 14px 0 28px;
+  color: #9b9b9b;
+  font-size: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92)
+}
+
+.input-group input {
+  width: 100%;
+  height: 46px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #2f2f2f;
+  color: rgba(255, 255, 255, 0.92);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input::placeholder {
+  color: #9b9b9b;
+}
+
+.input-group input:focus {
+  border-color: var(--bb-green);
+  box-shadow: 0 0 0 2px rgba(26, 86, 50, 0.35);
+}
+
+button {
+  width: 100%;
+  height: 46px;
+  padding: 0 18px;
+  font-size: 16px;
+  font-weight: 700;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  background: #222;
+  color: var(--bb-gold);
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: #262626;
+  box-shadow: 0 0 0 1px var(--bb-green) inset;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  margin-top: 15px;
+  color: #ff7b7b;
+  font-size: 14px;
+}
