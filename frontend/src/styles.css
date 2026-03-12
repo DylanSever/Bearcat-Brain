@@ -367,7 +367,7 @@ button:focus-visible {
   box-shadow: 0 0 0 2px rgba(26, 86, 50, 0.35);
 }
 
-button {
+.login-container button {
   width: 100%;
   height: 46px;
   padding: 0 18px;
@@ -382,12 +382,12 @@ button {
   transition: all 0.2s ease;
 }
 
-button:hover {
+.login-container button:hover {
   background: #262626;
   box-shadow: 0 0 0 1px var(--bb-green) inset;
 }
 
-button:disabled {
+.login-container button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
