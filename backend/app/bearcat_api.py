@@ -51,7 +51,7 @@ class ChatRequest(BaseModel):
 @app.post("/auth/login")
 def login_endpoint(request: LoginRequest):
     if not ldap_authentication(request.username, request.password):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        raise HTTPException(status_code=401, detail=f"Invalid credentials")
     
     token = create_jwt(request.username)
 
@@ -115,4 +115,4 @@ def chat_endpoint(request: ChatRequest, username: str = Depends(verify_token)):
 
     except Exception as e:
         print(f"error: {e}")
-        raise HTTPException(status_code=500, detail="Backend API Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Backend API Error: {str(e)}")
