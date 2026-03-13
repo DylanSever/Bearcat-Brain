@@ -2,7 +2,7 @@
 #Fast API setup that allows Frontend to make calls to Backend without using base ollama endpoint
 #make available with uvicorn bearcat_api:app --host 0.0.0.0 --port 8000
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Response
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -10,7 +10,7 @@ import ollama
 import chromadb
 import bearcat_sql
 import sys
-from auth import LoginRequest, ldap_authentication, create_jwt, verify_token
+from auth import LoginRequest, ldap_authentication, create_jwt, verify_token, JWT_EXPIRE
 
 #Server Setup
 app = FastAPI()
@@ -55,12 +55,22 @@ def login_endpoint(request: LoginRequest):
     
     token = create_jwt(request.username)
 
+    response.set_cookie(
+        key="userToken",
+        value=token,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age=JWT_expire * 60
+    )
+
     # TODO: add logging on new sql table
 
-    return {
-        "access_token": token,
-        "token_type": "bearer"
-    }
+    #return {
+     #   "access_token": token,
+      #  "token_type": "bearer"
+    #}
+    return{"message": "Login Successful, cookie set"}
 
 
 # chat endpoint with db knowledge set, protected with Depends(verify_token)

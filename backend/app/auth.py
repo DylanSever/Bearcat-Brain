@@ -4,7 +4,7 @@ from pathlib import Path
 from ldap3 import Server, Connection, ALL, NTLM
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 
@@ -17,7 +17,7 @@ JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_ALGO = "HS256"
 JWT_EXPIRE = 480
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/bearcat-brain/api/auth/login")
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/bearcat-brain/api/auth/login")
 
 class LoginRequest(BaseModel):
     username: str
@@ -50,9 +50,22 @@ def create_jwt(username: str) -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGO)
 
 # for api endpoints that require authentication
-async def verify_token(token: str = Depends(oauth2_scheme)):
+#async def verify_token(token: str = Depends(oauth2_scheme)):
+ #   try:
+  #      payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGO])
+   #     return payload["subject"]
+   # except JWTError:
+   #     raise HTTPException(status_code=401, detail="Token invalid or expired")
+async def verify_token(request: Request):
+
+    token = request.cookies.get("userToken")
+    if not token:
+        raise HTTPException (status_code=401, detail="No Secure Cookie Found.")
+
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGO])
-        return payload["subject"]
+        return paload["subject"]
     except JWTError:
-        raise HTTPException(status_code=401, detail="Token invalid or expired")
+        raise HTTPException(status_code=401, details="Cookie invalid or expiered")
+
+
