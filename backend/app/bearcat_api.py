@@ -18,7 +18,20 @@ app = FastAPI()
 #Allows React to communicate with server.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], #allows all connections
+    allow_origins=[
+	# 1. Local React Testing
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        
+        # 2. Production Domain
+        "https://cis2.stvincent.edu",  
+        
+        # 3. Nginx / Frontend IP
+        "http://10.25.1.251",
+        
+        # 4. Backend Server IP (Just to be perfectly safe!)
+        "http://10.25.1.49",
+        "http://10.25.1.49:8000"], #allegedly * doesnt work with cookies!
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -50,9 +63,13 @@ class ChatRequest(BaseModel):
 # authentication endpoint
 @app.post("/auth/login")
 def login_endpoint(request: LoginRequest, response: Response):
+    print(f"\n--- Incoming Login Attempt ---")
+    print(f"Username recieved: '{request.username}'")
+    print ("authorizing...")
     if not ldap_authentication(request.username, request.password):
+        print(" LDAP FAILED")
         raise HTTPException(status_code=401, detail=f"Invalid credentials")
-    
+    print("JWT created")
     token = create_jwt(request.username)
 
     response.set_cookie(
@@ -70,6 +87,7 @@ def login_endpoint(request: LoginRequest, response: Response):
      #   "access_token": token,
       #  "token_type": "bearer"
     #}
+    print ("login Successful")
     return{"message": "Login Successful, cookie set"}
 
 
