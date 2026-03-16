@@ -49,7 +49,7 @@ class ChatRequest(BaseModel):
 
 # authentication endpoint
 @app.post("/auth/login")
-def login_endpoint(request: LoginRequest):
+def login_endpoint(request: LoginRequest, response: Response):
     if not ldap_authentication(request.username, request.password):
         raise HTTPException(status_code=401, detail=f"Invalid credentials")
     
@@ -61,7 +61,7 @@ def login_endpoint(request: LoginRequest):
         httponly=True,
         secure=False,
         samesite="lax",
-        max_age=JWT_expire * 60
+        max_age=JWT_EXPIRE * 60
     )
 
     # TODO: add logging on new sql table
