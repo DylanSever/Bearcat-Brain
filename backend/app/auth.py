@@ -4,7 +4,7 @@ from pathlib import Path
 from ldap3 import Server, Connection, ALL, NTLM
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 
@@ -50,7 +50,10 @@ def create_jwt(username: str) -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGO)
 
 # for api endpoints that require authentication
-async def verify_token(token: str = Depends(oauth2_scheme)):
+async def verify_token(request: Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGO])
         return payload["subject"]
