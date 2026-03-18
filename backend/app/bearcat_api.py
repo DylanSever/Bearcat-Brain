@@ -10,7 +10,7 @@ import ollama
 import chromadb
 import bearcat_sql
 import sys
-from auth import LoginRequest, ldap_authentication, create_jwt, verify_token
+from auth import LoginRequest, ldap_authentication, create_jwt, verify_token, JWT_EXPIRE
 
 #Server Setup
 app = FastAPI()
@@ -18,7 +18,20 @@ app = FastAPI()
 #Allows React to communicate with server.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], #allows all connections
+    allow_origins=[
+	# 1. Local React Testing
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        
+        # 2. Production Domain
+        "https://cis2.stvincent.edu",  
+        
+        # 3. Nginx / Frontend IP
+        "http://10.25.1.251",
+        
+        # 4. Backend Server IP (Just to be perfectly safe!)
+        "http://10.25.1.49",
+        "http://10.25.1.49:8000"], #allegedly * doesnt work with cookies!
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -50,13 +63,30 @@ class ChatRequest(BaseModel):
 # authentication endpoint
 @app.post("/auth/login")
 def login_endpoint(request: LoginRequest, response: Response):
+<<<<<<< HEAD
+=======
+    print(f"\n--- Incoming Login Attempt ---")
+    print(f"Username recieved: '{request.username}'")
+    print ("authorizing...")
+>>>>>>> 841295d7238c5ad418644aae4ca02e9b5932cf8a
     if not ldap_authentication(request.username, request.password):
+        print(" LDAP FAILED")
         raise HTTPException(status_code=401, detail=f"Invalid credentials")
-    
+    print("JWT created")
     token = create_jwt(request.username)
+
+    response.set_cookie(
+        key="userToken",
+        value=token,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        max_age=JWT_EXPIRE * 60
+    )
 
     # TODO: add logging on new sql table
 
+<<<<<<< HEAD
     response.set_cookie(
         key="access_token",
         value=token,
@@ -67,6 +97,14 @@ def login_endpoint(request: LoginRequest, response: Response):
     )
 
     return { "message": "Login successful" }
+=======
+    #return {
+     #   "access_token": token,
+      #  "token_type": "bearer"
+    #}
+    print ("login Successful")
+    return{"message": "Login Successful, cookie set"}
+>>>>>>> 841295d7238c5ad418644aae4ca02e9b5932cf8a
 
 
 # chat endpoint with db knowledge set, protected with Depends(verify_token)
