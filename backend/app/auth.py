@@ -4,11 +4,7 @@ from pathlib import Path
 from ldap3 import Server, Connection, ALL, NTLM
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
-<<<<<<< HEAD
 from fastapi import HTTPException, Request
-=======
-from fastapi import HTTPException, Depends, Request
->>>>>>> 841295d7238c5ad418644aae4ca02e9b5932cf8a
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 
@@ -54,25 +50,10 @@ def create_jwt(username: str) -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGO)
 
 # for api endpoints that require authentication
-<<<<<<< HEAD
 async def verify_token(request: Request):
     token = request.cookies.get("access_token")
     if not token:
         raise HTTPException(status_code=401, detail="Not authenticated")
-=======
-#async def verify_token(token: str = Depends(oauth2_scheme)):
- #   try:
-  #      payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGO])
-   #     return payload["subject"]
-   # except JWTError:
-   #     raise HTTPException(status_code=401, detail="Token invalid or expired")
-async def verify_token(request: Request):
-
-    token = request.cookies.get("userToken")
-    if not token:
-        raise HTTPException (status_code=401, detail="No Secure Cookie Found.")
-
->>>>>>> 841295d7238c5ad418644aae4ca02e9b5932cf8a
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGO])
         return paload["subject"]

@@ -19,8 +19,8 @@ export default function Chat() {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
-      credentials: "include",
       body: JSON.stringify({ message: userMessage }),
     });
     if (!response.ok) {

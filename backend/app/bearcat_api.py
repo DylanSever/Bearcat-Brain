@@ -2,7 +2,7 @@
 #Fast API setup that allows Frontend to make calls to Backend without using base ollama endpoint
 #make available with uvicorn bearcat_api:app --host 0.0.0.0 --port 8000
 
-from fastapi import FastAPI, HTTPException, Depends, Response
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -63,12 +63,6 @@ class ChatRequest(BaseModel):
 # authentication endpoint
 @app.post("/auth/login")
 def login_endpoint(request: LoginRequest, response: Response):
-<<<<<<< HEAD
-=======
-    print(f"\n--- Incoming Login Attempt ---")
-    print(f"Username recieved: '{request.username}'")
-    print ("authorizing...")
->>>>>>> 841295d7238c5ad418644aae4ca02e9b5932cf8a
     if not ldap_authentication(request.username, request.password):
         print(" LDAP FAILED")
         raise HTTPException(status_code=401, detail=f"Invalid credentials")
@@ -86,7 +80,6 @@ def login_endpoint(request: LoginRequest, response: Response):
 
     # TODO: add logging on new sql table
 
-<<<<<<< HEAD
     response.set_cookie(
         key="access_token",
         value=token,
@@ -97,14 +90,6 @@ def login_endpoint(request: LoginRequest, response: Response):
     )
 
     return { "message": "Login successful" }
-=======
-    #return {
-     #   "access_token": token,
-      #  "token_type": "bearer"
-    #}
-    print ("login Successful")
-    return{"message": "Login Successful, cookie set"}
->>>>>>> 841295d7238c5ad418644aae4ca02e9b5932cf8a
 
 
 # chat endpoint with db knowledge set, protected with Depends(verify_token)

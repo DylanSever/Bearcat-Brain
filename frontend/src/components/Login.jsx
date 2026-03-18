@@ -1,4 +1,5 @@
 import { useState } from "react";
+/*import "./style.css";*/
 
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -17,7 +18,6 @@ export default function Login({ onLogin }) {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({ username, password }),
       });
 
