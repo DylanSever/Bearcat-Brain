@@ -2,7 +2,7 @@
 #Fast API setup that allows Frontend to make calls to Backend without using base ollama endpoint
 #make available with uvicorn bearcat_api:app --host 0.0.0.0 --port 8000
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Response
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -68,15 +68,6 @@ def login_endpoint(request: LoginRequest, response: Response):
         raise HTTPException(status_code=401, detail=f"Invalid credentials")
     print("JWT created")
     token = create_jwt(request.username)
-
-    response.set_cookie(
-        key="userToken",
-        value=token,
-        httponly=True,
-        secure=False,
-        samesite="lax",
-        max_age=JWT_EXPIRE * 60
-    )
 
     # TODO: add logging on new sql table
 

@@ -56,8 +56,8 @@ async def verify_token(request: Request):
         raise HTTPException(status_code=401, detail="Not authenticated")
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGO])
-        return paload["subject"]
+        return payload["subject"]
     except JWTError:
-        raise HTTPException(status_code=401, details="Cookie invalid or expiered")
+        raise HTTPException(status_code=401, detail="Cookie invalid or expiered")
 
 
