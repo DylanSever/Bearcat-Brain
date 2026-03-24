@@ -9,6 +9,22 @@ import Settings from "./components/Settings.jsx";
 import About from "./components/About.jsx";
 import NotFoundPage from "./components/NotFoundPage.jsx";
 
+
+export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  return (
+    <>
+      {isAuthenticated ? (
+        <Chat />
+      ) : (
+        <Login onLogin={() => setIsAuthenticated(true)} />
+      )}
+    </>
+  );
+}
+
+
 const router = createBrowserRouter(
   [
     {
