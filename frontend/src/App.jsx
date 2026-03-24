@@ -29,36 +29,11 @@ const router = createBrowserRouter(
 );
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-
- 
-  useEffect(() => {
-    fetch("/bearcat-brain/api/chat", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message: "auth check" }),
-    })
-      .then((res) => {
-        if (res.status === 401) {
-          setIsAuthenticated(false);
-        } else {
-          setIsAuthenticated(true);
-        }
-      })
-      .catch(() => setIsAuthenticated(false));
-  }, []);
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
-
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
 
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;
