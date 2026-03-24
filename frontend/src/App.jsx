@@ -10,21 +10,6 @@ import About from "./components/About.jsx";
 import NotFoundPage from "./components/NotFoundPage.jsx";
 
 
-export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  return (
-    <>
-      {isAuthenticated ? (
-        <Chat />
-      ) : (
-        <Login onLogin={() => setIsAuthenticated(true)} />
-      )}
-    </>
-  );
-}
-
-
 const router = createBrowserRouter(
   [
     {
@@ -44,17 +29,38 @@ const router = createBrowserRouter(
 );
 
 export default function App() {
-  const [token, setToken] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
-  const handleLogin = (newToken) => {
-    setToken(newToken);
+ 
+  useEffect(() => {
+    fetch("/bearcat-brain/api/chat", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: "auth check" }),
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          setIsAuthenticated(false);
+        } else {
+          setIsAuthenticated(true);
+        }
+      })
+      .catch(() => setIsAuthenticated(false));
+  }, []);
+
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
   };
 
-  const handleLogout = () => {
-    setToken(null);
-  };
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
+  }
 
-  if (!token) {
+  if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;
   }
 
