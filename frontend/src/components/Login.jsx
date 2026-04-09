@@ -1,5 +1,4 @@
 import { useState } from "react";
-/*import "./style.css";*/
 
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -28,7 +27,7 @@ export default function Login({ onLogin }) {
       }
 
       const data = await response.json();
-      onLogin(data.access_token);
+      onLogin();
     } catch {
       setError("Could not connect to server.");
     } finally {

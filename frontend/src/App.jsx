@@ -9,6 +9,7 @@ import Settings from "./components/Settings.jsx";
 import About from "./components/About.jsx";
 import NotFoundPage from "./components/NotFoundPage.jsx";
 
+
 const router = createBrowserRouter(
   [
     {
@@ -28,17 +29,13 @@ const router = createBrowserRouter(
 );
 
 export default function App() {
-  const [token, setToken] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleLogin = (newToken) => {
-    setToken(newToken);
+  const handleLogin = () => {
+    setIsAuthenticated(true);
   };
 
-  const handleLogout = () => {
-    setToken(null);
-  };
-
-  if (!token) {
+  if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;
   }
 
