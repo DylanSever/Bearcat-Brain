@@ -23,7 +23,7 @@ def create_connection():
     #if the server is down or not responding return nothing
             return None
 
-def log_interaction(user_input, ai_response, source_file="None"):
+def log_interaction(username, user_input, ai_response, source_file="None"):
     #begin connection to database
     conn = create_connection()
     #check if database is connected
@@ -35,16 +35,16 @@ def log_interaction(user_input, ai_response, source_file="None"):
         cursor = conn.cursor()
     # SQL command to insert chat log data into database
         query = """
-        INSERT INTO chat_logs (sender, message_content, relevant_doc_source, timestamp)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO chat_logs (username, sender, message_content, relevant_doc_source, timestamp)
+        VALUES (%s, %s, %s, %s, %s)
         """
     #this will log the users message. none is the source as this is useful for the ai reply.
-        cursor.execute(query, ('user', user_input, None, datetime.now()))
+        cursor.execute(query, (username, username, user_input, None, datetime.now()))
     #this will log the AIs response. the source file tells what type of document the information came from.
-        cursor.execute(query, ('bearcat_brain', ai_response, source_file, datetime.now()))
+        cursor.execute(query, (username, 'bearcat_brain', ai_response, source_file, datetime.now()))
     #commit change and save it into the database
         conn.commit()
-        print("   (chat logged to MySQL!)")
+        print(f"   (chat logged to MySQL for student: {username}!)")
 
 
     except Error as e:
