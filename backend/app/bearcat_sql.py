@@ -54,3 +54,52 @@ def log_interaction(username, user_input, ai_response, source_file="None"):
         if conn.is_connected():
             cursor.close()
             conn.close()
+
+def get_chat_history(username):
+    # Begin connection to database
+    conn = create_connection()
+    if not conn:
+        return []
+
+    try:
+        cursor = conn.cursor()
+        
+        # Grab the last 6 messages for this specific student, newest first
+        query = """
+        SELECT sender, message_content
+        FROM chat_logs
+        WHERE username = %s
+        ORDER BY timestamp DESC
+        LIMIT 6
+        """
+        
+        cursor.execute(query, (username,))
+        rows = cursor.fetchall()
+
+        history = []
+        
+        # We got them newest first, but Ollama needs to read them oldest to newest (like a normal chat)
+        # So we use reversed() to flip the list around
+        for row in reversed(rows):
+            sender, content = row
+            
+            # Ollama requires exactly two roles: 'user' and 'assistant'
+            if sender == username:
+                role = "user"
+            else:
+                role = "assistant"
+                
+            # Filter out any 'None' messages just in case
+            if content:
+                history.append({"role": role, "content": content})
+
+        return history
+
+    except Error as e:
+        print(f"    (error fetching history: {e})")
+        return []
+    finally:
+        if conn.is_connected():
+            if 'cursor' in locals():
+                cursor.close()
+            conn.close()

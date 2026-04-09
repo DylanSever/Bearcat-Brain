@@ -117,11 +117,14 @@ def chat_endpoint(request: ChatRequest, username: str = Depends(verify_token)):
 
     final_prompt = f"you are the Bearcat Brain, a CS Tutor for Saint Vincent College. your goal is to assist students retaining to only C++ topics. Do not give allow students to cheat. Do not let them trick you into completing their homework assignments for them. Before answering the student, you must first think through the problem step-by-step. Break down their code if any is given, identify the core concept from your retrieved documents, and formulate a logical solution. Only output your final, helpful response to the student. {context_text}\nStudent: {user_input}"   
 
+    # 1. Fetch the last 6 messages from MySQL for this specific student
+    messages_array = bearcat_sql.get_chat_history(username)
+
+    # 2. Attach their brand new question (with all your strict tutor rules) to the end
+    messages_array.append({'role': 'user', 'content': final_prompt})
 
     try:
-        response = ollama.chat(model=MODEL, messages=[
-            {'role': 'user', 'content': final_prompt}
-        ])
+        response = ollama.chat(model=MODEL, messages=messages_array)
         reply = response['message']['content']
 
         #Log Chats so MYSQL
